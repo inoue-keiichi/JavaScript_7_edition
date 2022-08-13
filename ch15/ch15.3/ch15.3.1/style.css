@@ -1,0 +1,21 @@
+body > h1 {
+  color: red;
+}
+
+body > h1:first-child {
+  color: lime;
+  background-color: black;
+}
+
+h2 ~ span {
+  color: blue;
+  opacity: 0.5;
+}
+
+p.hoge {
+  color: green;
+}
+
+.hoge {
+  color: pink;
+}
