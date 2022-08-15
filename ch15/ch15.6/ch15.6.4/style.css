@@ -1,0 +1,34 @@
+/*
+ * :hostセレクタはライトDOMでの<search-box>要素を参照する。このスタイルは
+ * デフォルトの設定。<search-box>のユーザはライトDOMのスタイルでオーバライド
+ * できる。
+ */
+:host {
+  display: inline-block; /* デフォルトはインライン表示。 */
+  border: solid black 1px; /* <input>と<slot>の周りを取り囲むボーダー。 */
+  border-radius: 5px;
+  padding: 4px 6px; /* ボーダの内側に余白を入れる。 */
+}
+:host([hidden]) {
+  /* 丸括弧に注意：ホストにhiddenが設定されている場合 */
+  display: none; /* 属性を設定して表示しないようにする。 */
+}
+:host([disabled]) {
+  /* ホストがdiabled属性を持つ場合、 */
+  opacity: 0.5; /* グレー表示する。 */
+}
+:host([focused]) {
+  /* ホストがfocused属性を持つ場合、 */
+  box-shadow: 0 0 2px 2px #6ae; /* フォーカスリングを表示する。 */
+}
+/* 以下のスタイルシートは、シャドウDOM中の要素にのみ適用される。 */
+input {
+  border-width: 0; /* 内部の入力フィールドのボーダーを隠す。 */
+  outline: none; /* フォーカスリングも隠す。*/
+  font: inherit; /* <input>要素はデフォルトではフォントを継承しない。 */
+  background: inherit; /* 背景色も同じ。*/
+}
+slot {
+  cursor: default; /* ボタン上のカーソルを矢印のポインタにする。 */
+  user-select: none; /* 絵文字をユーザが選択できないようにする。 */
+}
