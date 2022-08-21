@@ -62,7 +62,7 @@ class WorkerPool {
     // 指定した数のワーカーを作成し、メッセージハンドラとエラーハンドラを
     // 追加し、idleWorkers配列に保存する。
     for (let i = 0; i < numWorkers; i++) {
-      let worker = new Worker(workerSource);
+      let worker = this._newWorkerViaBlob(workerSource);
       worker.onmessage = (message) => {
         this._workerDone(worker, null, message.data);
       };
@@ -71,6 +71,18 @@ class WorkerPool {
       };
       this.idleWorkers[i] = worker;
     }
+  }
+
+  // ローカル環境で Worker の実行ファイルを開こうとするとエラーになる
+  // https://tshino.hatenablog.com/entry/20180106/1515218776
+  _newWorkerViaBlob(relativePath) {
+    const baseURL = window.location.href
+      .replace(/\\/g, "/")
+      .replace(/\/[^\/]*$/, "/");
+    const array = ['importScripts("' + baseURL + relativePath + '");'];
+    const blob = new Blob(array, { type: "text/javascript" });
+    const url = window.URL.createObjectURL(blob);
+    return new Worker(url);
   }
 
   // この内部メソッドは、ワーカーがメッセージを送信したり、エラーを
