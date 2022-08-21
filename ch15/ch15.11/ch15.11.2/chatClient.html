@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>SSE Chat</title>
+  </head>
+  <body>
+    <!-- チャットのメッセージはこの入力フィールドの前に挿入される。 -->
+    <input
+      id="input"
+      style="width: 100%; padding: 10px; border: solid black 2px"
+    />
+    <script>
+      // UIの細部を設定する。
+      const name = prompt("Enter your nickname");
+      const input = document.getElementById("input");
+      input.focus();
+
+      // EventSourceを使って新着メッセージの通知を受け取るようにする。
+      const chat = new EventSource("/chat");
+      chat.addEventListener("chat", (event) => {
+        // チャットメッセージを表示する
+        const div = document.createElement("div");
+        div.append(event.data);
+        input.before(div);
+        input.scrollIntoView();
+      });
+
+      input.addEventListener("change", () => {
+        fetch("/chat", {
+          method: "POST",
+          body: name + ": " + input.value,
+        }).catch((e) => console.error);
+        input.value = "";
+      });
+    </script>
+  </body>
+</html>
