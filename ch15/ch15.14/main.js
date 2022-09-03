@@ -1,21 +1,22 @@
 /*
  * このクラスは、キャンバスや画像の矩形を表す。Tileを使って、キャンバスを領域に
  * 分割して、ワーカーが独立して処理できるようにする。
+ * Tileオブジェクトのプロパティは、大きな矩形の中でのTileの位置とサイズを表す。
  */
 class Tile {
   constructor(x, y, width, height) {
-    this.x = x; // Tileオブジェクトの
-    this.y = y; // プロパティは、大きな
-    this.width = width; // 矩形の中でのTileの
-    this.height = height; // 位置とサイズを表す。
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
   }
 
   // この静的メソッドは、指定された幅と高さの矩形を、指定された数の行と
   // 列に分割し、その矩形を覆うように、numRows*numCols個のTileオブジェクトを
   // 生成するジェネレータ。
   static *tiles(width, height, numRows, numCols) {
-    let columnWidth = Math.ceil(width / numCols);
-    let rowHeight = Math.ceil(height / numRows);
+    const columnWidth = Math.ceil(width / numCols);
+    const rowHeight = Math.ceil(height / numRows);
 
     for (let row = 0; row < numRows; row++) {
       let tileHeight =
@@ -62,7 +63,7 @@ class WorkerPool {
     // 指定した数のワーカーを作成し、メッセージハンドラとエラーハンドラを
     // 追加し、idleWorkers配列に保存する。
     for (let i = 0; i < numWorkers; i++) {
-      let worker = this._newWorkerViaBlob(workerSource);
+      const worker = this._newWorkerViaBlob(workerSource);
       worker.onmessage = (message) => {
         this._workerDone(worker, null, message.data);
       };
@@ -275,15 +276,15 @@ class MandelbrotCanvas {
     // あることをメモしておき、現在の描画を完了したときに、複数の中間状態を
     // スキップして現在の状態を描画する。
     if (this.pendingRender) {
-      // すでに描画中であれば、
-      this.wantsRerender = true; // 後で描画を行うとメモしておき、
-      return; // 現時点ではこれ以上何もしない。
+      // すでに描画中であれば、後で描画を行うとメモしておき、現時点ではこれ以上何もしない。
+      this.wantsRerender = true;
+      return;
     }
 
     // 状態変数を取得して、canvasの左上隅の複素数を計算する。
-    let { cx, cy, perPixel, maxIterations } = this.state;
-    let x0 = cx - (perPixel * this.width) / 2;
-    let y0 = cy - (perPixel * this.height) / 2;
+    const { cx, cy, perPixel, maxIterations } = this.state;
+    const x0 = cx - (perPixel * this.width) / 2;
+    const y0 = cy - (perPixel * this.height) / 2;
 
     // ROWS*COLSのTileそれぞれに対して、mandelbrotWorker.jsのコードに
     // 対するメッセージを引数にしてaddWork()を呼び出す。戻り値のPromise
